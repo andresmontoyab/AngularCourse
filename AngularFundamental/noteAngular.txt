@@ -1,0 +1,12 @@
+//Componentes encapsulan la informacion, el html y la logica de la vista, la cual es una area de la pantalla que el usuario ve.
+// Cada aplicaion tiene almenos un componente que llamamos app component o root component
+
+Pasos de un componente 
+
+Create
+
+REgister in a modeulo
+
+add element in a html 
+
+//Modulos es un contenedor de un grupo de componentes relacionados, cada aplicacion angulkar tiene almenos un modulo llamado app module.
