@@ -27,11 +27,14 @@ import { CoursesService } from './courses.service';
     </div>
     <div>
         <br/>
-        {{ examplePipe.title }} <br/>
-        {{ examplePipe.rating }} <br/>
-        {{ examplePipe.students }} <br/>
-        {{ examplePipe.price }} <br/>
-        {{ examplePipe.releaseDate }} <br/>
+        {{ examplePipe.title | uppercase | lowercase }} <br/>
+        {{ examplePipe.rating  |number:'1.1-1'}} <br/>
+        {{ examplePipe.students | number }} <br/>
+        {{ examplePipe.price | currency:'AUD':true:'3.2-2'}} <br/>
+        {{ examplePipe.releaseDate | date:'shortDate'}} <br/>
+    </div>
+    <div>
+        {{ customPipeText | summary:10 }}
     </div>
     ` 
 }) 
@@ -48,6 +51,9 @@ export class CoursesComponent {
         price: 190.95,
         releaseDate: new Date(2017,12,22)
     }
+    customPipeText = `
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent iaculis euismod euismod. Aliquam non quam molestie, placerat enim id, ultrices ligula. Aliquam sed odio vel lorem congue mollis. Praesent ac lacinia ligula. Morbi luctus diam ac purus vestibulum euismod. Suspendisse efficitur interdum accumsan. Pellentesque id varius ex.     Fusce semper metus vitae leo ultrices sodales. Maecenas dignissim, elit sed faucibus vehicula, lectus magna fringilla odio, eget tempus urna ipsum in ex. Curabitur nisl dui, varius vitae porttitor elementum, mattis ut neque. Vivamus at elit sapien. Maecenas vehicula libero libero, ut semper eros volutpat quis. Vivamus tristique lorem enim, a ultricies dui sollicitudin ac. Cras sed mauris ut purus placerat condimentum in quis metus. Vestibulum ut consectetur sem. Maecenas justo sem, consectetur in dolor et, luctus auctor ante. Proin a tempus augue. Proin eget sem magna. Pellentesque sollicitudin ornare nisl non varius. Fusce eget placerat massa. Duis rutrum fermentum nisl, at vestibulum mauris ullamcorper nec. Quisque varius diam ut nisl dictum, non tempor lorem vestibulum. Aenean semper consectetur dolor, sed rutrum magna lobortis sed.    Cras accumsan neque id ultricies fringilla. Nullam enim nunc, lobortis nec lacinia condimentum, mattis in elit. Sed dui quam, varius non purus sed, tincidunt dignissim quam. Vestibulum sit.
+    `
     imageURL = "http://lorempixel.com/400/200";
     
     constructor(service : CoursesService) { // DependencyInjection --> Se deberá registrar en provider para que funcione

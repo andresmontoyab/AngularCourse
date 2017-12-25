@@ -1,4 +1,7 @@
 <h1>angular</h1>
+<app-favorite [is-favorite]="post.isFavorite" (change)="onChangeFavorite($event)"></app-favorite>
+
 <courses></courses>
 <app-author></app-author>
-
+<app-star></app-star>
+<app-title-case></app-title-case>
