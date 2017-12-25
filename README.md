@@ -194,16 +194,18 @@ Esto tiene el objetivo de mandar eventos desde el componente cuando se cumpla un
 
 3. Deberemos crear una funcion en nuestro app.component.ts onChangeFavorite()
 
-4. Por ultimo debemos unificar los dos pasos anteriores por medio del app.component.html de la siguiente manera <app-favorite [is-favorite]="post.isFavorite" (change)="onChangeFavorite()"></app-favorite>
+4. Por ultimo debemos unificar los dos pasos anteriores por medio del app.component.html de la siguiente manera 
+    <app-favorite [is-favorite]="post.isFavorite" (change)="onChangeFavorite()"></app-favorite>
 
 ## Pasar informacion en OutPuts
 
 Para pasar informacion con el Eventemitter, deberemos añadirle la informacion a la funcion . emit. como mostraremos a continuacion.
 
-1. Añadir informacion. --> this.change.emit(sendData);
+1. Añadir informacion. 
+     this.change.emit(sendData);
 
 2. Pasarle el evento en app.component.html
--->  <app-favorite [is-favorite]="post.isFavorite" (change)="onChangeFavorite($event)"></app-favorite>
+     <app-favorite [is-favorite]="post.isFavorite" (change)="onChangeFavorite($event)"></app-favorite>
 
 3. Agregar parametro en donde guardará la informacion enviada en la funcion que recibe el evento.
---> onChangeFavorite(data: dataOutPut) {
+    onChangeFavorite(data: dataOutPut) {
