@@ -4,4 +4,41 @@
 </ng-template>
 <ng-template #noCourses>
     No Courses Yet!!
-  </ng-template>
+</ng-template>
+
+<br/>
+<br/>
+
+<ul class="nav nav-pills">
+  <li [class.active]="viewMode == 'map'" ><a (click)="viewMode ='map'">Map View</a></li>
+  <li [class.active]="viewMode == 'list'"><a (click)="viewMode ='list'">List View</a></li>
+</ul>
+<div [ngSwitch]="viewMode">
+  <div *ngSwitchCase="'map'">Map data</div>
+  <div *ngSwitchCase="'list'">List Data</div>
+  <div *ngSwitchCaseDefault>Otherwise</div>
+</div>
+
+<br/>
+<br/>
+
+<button (click)="onAdd()">Add Course</button>
+<button (click)="loadData()">Load Data</button>
+<ul>
+  <li *ngFor="let course of courses; even as isEven; index as i">
+      {{ i}} - {{ course.name }} 
+      <button (click)="onDelete(i)">Remove</button>
+      <span *ngIf="isEven">(Even)</span>
+  </li>
+</ul>
+
+<br/>
+<br/>
+
+<span class="glyphicon"
+[ngClass]="{
+  'glyphicon-star': isSelected,
+  'glyphicon-star-empty' : !isSelected
+}"
+(click)="onClick()">
+</span>

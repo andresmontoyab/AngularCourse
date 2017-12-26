@@ -56,11 +56,46 @@ Sin embargo los dos primeros pasos se pueden reducir, utilizando la funcionalida
 
 Se usan para manipular el dom (Documento Object Model, el dom es construido como un arbol de objetos) puede ser usado para añadir elementos al DOM o eleminar un elemento existente, o cambiar la clase de un elemento del dom etc.
 
+Cuando se presenta una actualizacion de un objeto o atributo, angular detecta un cambio y actualiza inmediatamente nustro DOM
+
+Cuando la directiva a usar manipulará la estrucutra del DOM deberemos adicionar antes de la directiva el signo "*"
+
  1. Directivas
-    1.1. *ngFor= "course of courses"; Se usa el "*" cuando modificamos la estrucutra del DOM.
 
-    1.2. 
+    1.1. *ngFor= "course of courses"; esta directiva nos permite recorrrer una lista o un objeto e imprimirlo en nuestra vista. Ademas de esto esta directiva tambien tiene propiedades propias como even o index.
 
+        <button (click)="onAdd()">Add Course</button>
+
+        <ul>
+            <li *ngFor="let course of courses; even as isEven;trackBy: trackCourse; index as i">
+                {{ i}} - {{ course.name }} 
+                <button (click)="onDelete(i)">Remove</button>
+                <span *ngIf="isEven">(Even)</span>
+            </li>
+        </ul>
+
+        TracBy es un metodo de busquedad que sirve para optimizar el rendimiento de la aplicacion cuando debe mostrar largas listas, este buscará por medio del track si el id ya ha sido cargado y en caso de que ya este cargado no renderizará de nuevo su elemento DOM en la vista.
+
+    1.2. *ngIf ="courses.length > 0; then coursesList else noCourses"  --> Donde coursesList y noCourses son ng-Templates, si la evaluacion del a condicion es verdaderá se añadirá al DOM coursesList y se eliminará del DOM noCourses, en caso contrario quedará noCourses y se eliminará del DOM coursesList.
+
+    ngIf es recomanado utilizar cuando la estructura DOM esta construida por un arbol extenso, en caso de que sea un arbol pequeño se obtiene más rendimiento con la propiedad hidden
+
+        <ng-template #coursesList>
+            Courses List
+        </ng-template>
+        <ng-template #noCourses>
+            No Courses Yet!!
+        </ng-template>
+
+    1.3 *ngSwitchCase, esta directica se utiliza cuando se quiere comparar un valor o campos contra diferentes valores, por ejemplo si tenemos una variable de la cual depende si se muestran o no varios elementos.
+
+        <div [ngSwitch]="viewMode">
+            <div *ngSwitchCase="'map'">Map data</div>
+            <div *ngSwitchCase="'list'">List Data</div>
+            <div *ngSwitchCaseDefault>Otherwise</div>
+        </div>
+
+    1.4
 
 ## Services
 
@@ -252,3 +287,4 @@ Si solo queremos enviar un valor más no algun elemento que altere el DOM es dec
     <ng-container class="heading">Ng container Heading</ng-container>
     <ng-container class="body">Ng container Body</ng-container>
 </bootstrap-panel>
+
