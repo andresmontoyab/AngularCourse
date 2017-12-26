@@ -14,6 +14,8 @@ import { CourseComponent } from './course/course.component';
 import { StarComponent } from './star/star.component';
 import { TitleCaseComponent } from './title-case/title-case.component';
 import { FavoriteComponent } from './favorite/favorite.component';
+import { BootstrapPanelComponent } from './bootstrap-panel/bootstrap-panel.component';
+import { LikeComponent } from './like/like.component';
 
 
 @NgModule({
@@ -26,7 +28,9 @@ import { FavoriteComponent } from './favorite/favorite.component';
     StarComponent,
     TitleCaseComponent,
     PipeTitleCase,
-    FavoriteComponent
+    FavoriteComponent,
+    BootstrapPanelComponent,
+    LikeComponent
   ],
   imports: [
     BrowserModule,

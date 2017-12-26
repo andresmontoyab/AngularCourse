@@ -12,6 +12,11 @@ export class AppComponent {
     isFavorite : true
   }
 
+  tweet = {
+    isLiked: true,
+    likesCount : 13
+  }
+
   onChangeFavorite(data: dataOutPut) {
     console.log(' The value of favorite is: '+ data.isSelected
                 +'\n The value of the year is: ' + data.year 

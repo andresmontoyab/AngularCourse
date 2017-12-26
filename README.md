@@ -208,4 +208,47 @@ Para pasar informacion con el Eventemitter, deberemos añadirle la informacion a
      <app-favorite [is-favorite]="post.isFavorite" (change)="onChangeFavorite($event)"></app-favorite>
 
 3. Agregar parametro en donde guardará la informacion enviada en la funcion que recibe el evento.
-    onChangeFavorite(data: dataOutPut) {
+    onChangeFavorite(data: dataOutPut)
+
+## Alias para Output
+
+Al igual que para los input tambien tenemos la opcion de configurar un alias para nuestro output, para hacerlo deberemos hacerlo siguiente.
+
+     @Output('change') click = new EventEmitter();
+
+## View Encapsulation y Shadow DOM
+
+shadow DOM es una estrategia que evita que un estilo definido en css impacte otros componentes, es decir limita un scope de aplicacion para un estilo en especifico.
+
+Angular nos brinda el atributo viewEncapsulation para poder generar automaticamente el comportamiento de shadow DOM
+
+## Ng Content && Ng container
+
+Si queremos tener un componente re utilizable, deberemos encontrar formas para pasarle informacion que deseamos adaptar al componente, ng Contente es una etiqueta que nos sirve para esto.
+
+Si tenemos un panel que queremos utilizar en diferentes momentos, con diferentes titulos deberemos tener un html como el siguiente.
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <ng-content select=".heading"></ng-content>
+  </div>
+  <div class="panel-body">
+    <ng-content select=".body"></ng-content>
+  </div>
+</div>
+
+
+Luego desde donde queremos reutilizar y enviar los parametros que deseamos deberemos hacerlo de la siguiente forma, teniendo en cuenta que el componente anterior se llamada boostrap-panel.
+
+<bootstrap-panel>
+    <div class="heading">Heading</div>
+    <div class="body">CHACA</div>
+</bootstrap-panel>.
+
+Si solo queremos enviar un valor más no algun elemento que altere el DOM es decir solo queremos enviar un nombre y no ningun div,h2,h1 podremos utilizar ng-container
+
+<h1>angular</h1>
+<bootstrap-panel>
+    <ng-container class="heading">Ng container Heading</ng-container>
+    <ng-container class="body">Ng container Body</ng-container>
+</bootstrap-panel>

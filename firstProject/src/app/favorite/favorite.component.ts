@@ -3,16 +3,18 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-favorite',
   templateUrl: './favorite.component.html',
-  styleUrls: ['./favorite.component.css']
-})
-export class FavoriteComponent implements OnInit {
-  @Input('is-favorite') isFavorite = true;
-  @Output() change = new EventEmitter();
-  constructor() { }
-
-  ngOnInit() {
+  styleUrls: ['./favorite.component.css'],
+  styles: [
+    `
+    .glyphicon {
+      color: blue;
   }
-
+  `
+  ]
+})
+export class FavoriteComponent  {
+  @Input('is-favorite') isFavorite = true;
+  @Output('change') click = new EventEmitter();
   onClick() {
     this.isFavorite = !this.isFavorite;
     let sendData = {
@@ -21,7 +23,7 @@ export class FavoriteComponent implements OnInit {
       month: "December"
     }
 
-    this.change.emit(sendData);
+    this.click.emit(sendData);
   }
 }
 
