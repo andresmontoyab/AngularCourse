@@ -58,7 +58,7 @@ Se usan para manipular el dom (Documento Object Model, el dom es construido como
 
 Cuando se presenta una actualizacion de un objeto o atributo, angular detecta un cambio y actualiza inmediatamente nustro DOM
 
-Cuando la directiva a usar manipulará la estrucutra del DOM deberemos adicionar antes de la directiva el signo "*"
+Cuando la directiva a usar manipulará la estrucutra del DOM deberemos adicionar antes de la directiva el signo "*", cuando angular lea el "*" este creará ng templates con los atributos [ngIf] o [ngFor] dependiendo que directiva se este usando.
 
  1. Directivas
 
@@ -74,7 +74,7 @@ Cuando la directiva a usar manipulará la estrucutra del DOM deberemos adicionar
             </li>
         </ul>
 
-        TracBy es un metodo de busquedad que sirve para optimizar el rendimiento de la aplicacion cuando debe mostrar largas listas, este buscará por medio del track si el id ya ha sido cargado y en caso de que ya este cargado no renderizará de nuevo su elemento DOM en la vista.
+        TracBy es un metodo de busquedad que sirve para optimizar el rendimiento de la aplicacion cuando debe mostrar largas listas, este buscará por medio del track si el id ya ha sido cargado y en caso de que ya este cargado no renderizará de nuevo su elemento DOM en la vista.Es importante notar que la forma de buscar estos objetos debe tener un identificador unico, para nuestro ejemplo será el index.
 
     1.2. *ngIf ="courses.length > 0; then coursesList else noCourses"  --> Donde coursesList y noCourses son ng-Templates, si la evaluacion del a condicion es verdaderá se añadirá al DOM coursesList y se eliminará del DOM noCourses, en caso contrario quedará noCourses y se eliminará del DOM coursesList.
 
@@ -95,7 +95,55 @@ Cuando la directiva a usar manipulará la estrucutra del DOM deberemos adicionar
             <div *ngSwitchCaseDefault>Otherwise</div>
         </div>
 
-    1.4
+    1.4 ngClass --> Como se ha visto se puede utilizar la propiedad [class.nameClass] en angular para el manejo de las clases de los elementos, adicionalmente angular tambien nos brinda otra herramienta llamada ngClass.
+
+        <span class="glyphicon"
+            [ngClass]="{
+            'glyphicon-star': isSelected,
+            'glyphicon-star-empty' : !isSelected
+            }"
+            (click)="onClick()">
+        </span>
+
+    1.5 ng Style --> Similar a la etiqueta anterior, tambien tendremos una directiva que nos ayudará al manejo de nuestros estilos. Cada uno de los atributos de stylo estaran asociadas a una variable o condiciones que haga que se cumpla o no el atributo
+
+        <button [ngStyle]="{
+            'backgroundColor' : canSave ? 'blue' : 'gray',
+            'color': canSave ? 'white' : 'black'
+        }"> Save
+        </button>
+    
+## Crear Directivas
+
+Como ya hemos definido las directivas son estructuras de angular utilizadas para la manipulacion del DOM, para customizar el comportamiento de nuestras aplicaciones tenemos la opcion de crear directivas propias.
+
+    1. ng g d nameDirective.
+
+    2. Abriremos el ts de nuestra directiva e importaremos las siguientes librerias.
+        import { Directive, HostListener, ElementRef, Input } from '@angular/core';
+
+    3. Deberemos añadir a nuestro constructor el objeto ElementRef.
+        constructor(private el: ElementRef) { }
+
+    4. Crearemos un atributo input para nuestra directiva, que nos servirá para enviarle informacion.
+
+        @Input('appInputFormat') format:string;
+
+    5. Deberemos implementar el metodo onBlur para que actue en el instante que el cursor se presionar fuera del elemento a modificar.
+
+        @HostListener('blur') onBlur() {
+        let value : string = this.el.nativeElement.value;
+            if (this.format == 'lower')
+                this.el.nativeElement.value = value.toLowerCase();
+            else 
+                this.el.nativeElement.value = value.toUpperCase();
+            }
+    
+    6. Como ultimo deberemos crear un elemento DOM y utilizar nuestra nueva directiva
+        <input type="text" [appInputFormat]="'lower'">
+    
+    Como pueden observar [appInputFormat] sirve tanto de directiva como Input de entrada para nuestra directiva
+
 
 ## Services
 
@@ -263,28 +311,34 @@ Si queremos tener un componente re utilizable, deberemos encontrar formas para p
 
 Si tenemos un panel que queremos utilizar en diferentes momentos, con diferentes titulos deberemos tener un html como el siguiente.
 
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <ng-content select=".heading"></ng-content>
-  </div>
-  <div class="panel-body">
-    <ng-content select=".body"></ng-content>
-  </div>
-</div>
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <ng-content select=".heading"></ng-content>
+        </div>
+        <div class="panel-body">
+            <ng-content select=".body"></ng-content>
+        </div>
+        </div>
 
 
 Luego desde donde queremos reutilizar y enviar los parametros que deseamos deberemos hacerlo de la siguiente forma, teniendo en cuenta que el componente anterior se llamada boostrap-panel.
 
-<bootstrap-panel>
-    <div class="heading">Heading</div>
-    <div class="body">CHACA</div>
-</bootstrap-panel>.
+        <bootstrap-panel>
+            <div class="heading">Heading</div>
+            <div class="body">CHACA</div>
+        </bootstrap-panel>.
 
 Si solo queremos enviar un valor más no algun elemento que altere el DOM es decir solo queremos enviar un nombre y no ningun div,h2,h1 podremos utilizar ng-container
 
-<h1>angular</h1>
-<bootstrap-panel>
-    <ng-container class="heading">Ng container Heading</ng-container>
-    <ng-container class="body">Ng container Body</ng-container>
-</bootstrap-panel>
+        <h1>angular</h1>
+        <bootstrap-panel>
+            <ng-container class="heading">Ng container Heading</ng-container>
+            <ng-container class="body">Ng container Body</ng-container>
+        </bootstrap-panel>
+
+## Safe Transversal Operator
+
+En diferentes puntos de nuestra aplicacion podremos tener un objeto el cual posiblemente en algun instante tenga el valor de null, si en un instante tratamos de mostrar este objeto en la vista, nos generará un error, para evitar esto existe el safe transversal operator "?" el cual solo mostrará un valor siempre y cuando no este en nulo.
+
+        {{ task.assignee?.name}}        
 

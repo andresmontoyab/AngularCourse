@@ -1,3 +1,9 @@
+<H1>Begin Task 5</H1>
+  <zippy title="Hi there">
+      Title Details
+  </zippy>
+<h1>End Task 5</h1>
+
 <div *ngIf="courses.length > 0; then coursesList else noCourses"></div>
 <ng-template #coursesList>
   Courses List
@@ -42,3 +48,17 @@
 }"
 (click)="onClick()">
 </span>
+
+<br/>
+<br/>
+
+<button [ngStyle]="{
+  'backgroundColor' : canSave ? 'blue' : 'gray',
+  'color': canSave ? 'white' : 'black'
+}"> Save
+</button>
+
+<br/>
+<br/>
+
+<input type="text" [appInputFormat]="'lower'">

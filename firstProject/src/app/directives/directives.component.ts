@@ -9,6 +9,14 @@ export class DirectivesComponent {
 
   courses = [];
   isSelected: boolean = true;
+  viewMode = 'list';
+  canSave = true;
+  task = {
+    title: 'Review applications',
+    assignee: {
+      name: 'John Smith'
+    }
+  }
 
   onAdd () {
     this.courses.push( { id: 55, name: 'This is a new Course' });
@@ -17,8 +25,7 @@ export class DirectivesComponent {
   onDelete (index) {
     this.courses.splice(index,1);
   }
-  viewMode = 'list';
-
+ 
   trackCourse (index, course) {
     return course ? course.id : undefined;
   }
