@@ -10,4 +10,14 @@ export class ContactFormComponent {
   constructor() { }
 
   log(x) {console.log(x)}
+
+  submit (form) {
+    console.log(form.value);
+  }
+
+  contactMethods = [
+    {id: 1, name: 'Email'},
+    {id: 2, name: 'Both'},
+    {id: 3, name: 'Third'}
+  ]
 }

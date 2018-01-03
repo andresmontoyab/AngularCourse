@@ -340,5 +340,7 @@ Si solo queremos enviar un valor más no algun elemento que altere el DOM es dec
 
 En diferentes puntos de nuestra aplicacion podremos tener un objeto el cual posiblemente en algun instante tenga el valor de null, si en un instante tratamos de mostrar este objeto en la vista, nos generará un error, para evitar esto existe el safe transversal operator "?" el cual solo mostrará un valor siempre y cuando no este en nulo.
 
-        {{ task.assignee?.name}}        
+        {{ task.assignee?.name}}
+
+FormControl representa solamente un input field y el otro es FormGroup es cual representa una grupo de input fields , cuando aplicamos ngModel Directive sobre un input field, angular automaticamente crea un formControlObjetct , por otro lado la directiva ngForm es aplicada a todos los grupos de form elementosy con esto angular creara un FormGruop para nuestro form, ademas si tenemos forms complejas con multiples subgrupos, podremos utilizar ngModelGroupDirective y esta directiva similar como ngForm creará un objeto FormGroup para el grupo, ¿Cual es la diferencia entre ngForm y ngModelGroup? la diferencia entre estas dos es la directiva ngSubmit que ngForm contiene, ngModeloGroup no tiene esta propiedad                
 
