@@ -342,5 +342,17 @@ En diferentes puntos de nuestra aplicacion podremos tener un objeto el cual posi
 
         {{ task.assignee?.name}}
 
-FormControl representa solamente un input field y el otro es FormGroup es cual representa una grupo de input fields , cuando aplicamos ngModel Directive sobre un input field, angular automaticamente crea un formControlObjetct , por otro lado la directiva ngForm es aplicada a todos los grupos de form elementosy con esto angular creara un FormGruop para nuestro form, ademas si tenemos forms complejas con multiples subgrupos, podremos utilizar ngModelGroupDirective y esta directiva similar como ngForm creará un objeto FormGroup para el grupo, ¿Cual es la diferencia entre ngForm y ngModelGroup? la diferencia entre estas dos es la directiva ngSubmit que ngForm contiene, ngModeloGroup no tiene esta propiedad                
+## Form Control
+
+FormControl representa solamente un input field y el otro es FormGroup es cual representa una grupo de input fields , cuando aplicamos ngModel Directive sobre un input field, angular automaticamente crea un formControlObjetct , por otro lado la directiva ngForm es aplicada a todos los grupos de form elementosy con esto angular creara un FormGruop para nuestro form, ademas si tenemos forms complejas con multiples subgrupos, podremos utilizar ngModelGroupDirective y esta directiva similar como ngForm creará un objeto FormGroup para el grupo, ¿Cual es la diferencia entre ngForm y ngModelGroup? la diferencia entre estas dos es la directiva ngSubmit que ngForm contiene, ngModeloGroup no tiene esta propiedad   
+
+## Routes and Navogation
+
+Para la configuracion de esto deberemos seguir lo siguientes pasos, 
+
+1.Congiurar las rutas, cada ruta determina que componente debe ser visible cuando el usuario navega en una url en especifico . 
+
+2. Segundo deberemos añadir un router Outlet esto es cuando dmostramos el correspondiente componente dado para la ruta activa.
+
+3. Finalmente Añadimos Links.
 
