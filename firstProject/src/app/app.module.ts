@@ -1,4 +1,5 @@
 import { PipeTitleCase } from './title-case.pipe';
+import { RouterModule } from '@angular/router';
 import { SummaryPipe } from './summary.pipe';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +22,12 @@ import { InputFormatDirective } from './input-format.directive';
 import { ZippyComponent } from './zippy/zippy.component';
 import { ContactFormComponent } from './contact-form/contact-form.component';
 import { CourseUdemyTeacherComponent } from './course-udemy-teacher/course-udemy-teacher.component';
-
+import { NavbarComponent } from './navbar/navbar.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { FollowersComponent } from './followers/followers.component';
+import { ProfileComponent } from './profile/profile.component';
+import { SomeFollowersComponent } from './some-followers/some-followers.component';
+import { AnotherFollowersComponent } from './another-followers/another-followers.component';
 
 @NgModule({
   declarations: [
@@ -40,11 +46,24 @@ import { CourseUdemyTeacherComponent } from './course-udemy-teacher/course-udemy
     InputFormatDirective,
     ZippyComponent,
     ContactFormComponent,
-    CourseUdemyTeacherComponent
-  ],
+    CourseUdemyTeacherComponent,
+    NavbarComponent,
+    WelcomeComponent,
+    FollowersComponent,
+    ProfileComponent,
+    SomeFollowersComponent,
+    AnotherFollowersComponent
+    ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot([
+      { path: '', component:  WelcomeComponent},
+      { path: 'followers', component:  FollowersComponent},
+      { path: 'profile', component:  ProfileComponent},
+      { path: 'someProfile/:id/:username', component:  SomeFollowersComponent},
+      { path: 'anotherFollower', component:  AnotherFollowersComponent},
+    ])
   ],
   providers: [
     CoursesService, 

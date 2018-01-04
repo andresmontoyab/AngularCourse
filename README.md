@@ -356,3 +356,29 @@ Para la configuracion de esto deberemos seguir lo siguientes pasos,
 
 3. Finalmente Añadimos Links.
 
+## RouterLink vs Href
+
+Para rutas simples podemos utulizar routerLink
+
+<a routerLink="/followers">
+
+si estamos tratando con una ruta con parametros utilizaremos routerLink como atributo y seperamos por comas la url
+
+<a [routerLink]="['followers', followers.id]">
+<a [routerLink]="['followers', followers.id, followers.login]">
+
+## RouterLinkActive vs active class
+
+Pasar informacion de url compleja al typescript
+
+## Observables
+
+
+Un observable es una coleccion de informacion asincrona que llega en el momento, si para nuestra aplicacion el usuario tiene la capacidad de moverse entre paginas hacia delante o atras, requeriremos uns observable, en modo de que nuestro usuario no requiera esta funcionalidad podremos utilizar un snapshot.
+
+
+Se usan usualmente cuando navegamos sobre un mismo componente pero los parametros de la ruta varian en este, por ende es importante tener siempre un observable en el cual cada vez que se identifique un cambio en los route parameter este los detecte
+
+## Suscribir varios Observables
+
+
