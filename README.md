@@ -356,7 +356,26 @@ Para la configuracion de esto deberemos seguir lo siguientes pasos,
 
 3. Finalmente Añadimos Links.
 
-## RouterLink vs Href
+Como se menciono antes inicialmente se deberan definir la configuracion de las rutas, para esto deberemos ir a nuestro archivo app.module y en la seccion de importaciones colocar las especificaciones y la relaciones entre nuestras URL y componentes.
+
+        RouterModule.forRoot([
+            { path: '', component:  WelcomeComponent},
+            { path: 'followers', component:  FollowersComponent},
+            { path: 'profile', component:  ProfileComponent},
+            { path: 'someProfile/:id/:username', component:  SomeFollowersComponent},
+            { path: 'anotherFollower', component:  AnotherFollowersComponent},
+            ])
+        ]
+
+Adicionalmente se deberá adiconar la libreria de router para que la navegacion funcione.
+
+        import { RouterModule } from '@angular/router';
+
+Luego de esto deberemos añadir la etiqueda router outlet en nuestro app.component.html para que sean visible el componente base y nos podamos mover entre la navegacion definida.
+
+    <router-outlet></router-outlet> 
+
+## Links
 
 Para rutas simples podemos utulizar routerLink
 
@@ -369,16 +388,209 @@ si estamos tratando con una ruta con parametros utilizaremos routerLink como atr
 
 ## RouterLinkActive vs active class
 
-Pasar informacion de url compleja al typescript
+El active class en nuestros paneles nos dirá en cual panel estamos parados o esta seleccionados, sin embargo cuando utilizamos nuestra navegacion se deberá implementar una logica para que defina y muestra el panel seleccionado es decir, decir cual de las diferentes opciones esta "active", con la directiva RouterLinkActive este cambio se hará automaticamente y recien realicemos un cambio de panel este se marcará como se debe.
 
 ## Observables
 
-
 Un observable es una coleccion de informacion asincrona que llega en el momento, si para nuestra aplicacion el usuario tiene la capacidad de moverse entre paginas hacia delante o atras, requeriremos uns observable, en modo de que nuestro usuario no requiera esta funcionalidad podremos utilizar un snapshot.
-
 
 Se usan usualmente cuando navegamos sobre un mismo componente pero los parametros de la ruta varian en este, por ende es importante tener siempre un observable en el cual cada vez que se identifique un cambio en los route parameter este los detecte
 
 ## Suscribir varios Observables
+
+En diferentes ocasiones deberemos tener en un mismo componente observable diferentes componentes, un ejemplo de esto es cuando tenemos una url compuesta, con valores obligatorios y valores opcionales como url/follow?page=1&order=newest, por ende seria optimo tener dos observables que escuchen tanto los Params como los QueryParams(opcionales.)
+
+        Observable.combineLatest([
+            this.route.paramMap,
+            this.route.queryParamMap
+            ])
+            .switchMap(combined => {
+            let id = combined[0].get('id');
+            let page = combined[1].get('page');
+
+            return [ {name: 'Andres', id: 1020}, {name: 'Daniel', id: 1021 } ]
+
+            })
+            .subscribe(followers => this.followers);
+
+        }
+Inicialmente vemos un objeto "Observable" en el cual esta implemntada la funcion combineLatest, esta es necesaria para combinar los diferentes observables que definiiremos, ademas tambien usamos la funcion switchMap para poder transformar nuestro objetos a observables. Para cada una de estas herramientas utilizadas se deberá realizar su oportuna importacion.
+
+    import { Observable } from 'rxjs/Observable';
+    import 'rxjs/add/observable/combineLatest';
+    import 'rxjs/add/operator/map';
+    import 'rxjs/add/operator/switchMap';
+
+## Map and SwitchMap
+
+Usamos nuestro map operator para transformar nuestros objetos a observables, en nuestra implementacion map nos retornará un Observable<any> lo que se interpretará como una coleccion dentro de otra coleccion y lo que realmente se requeria era un objeto de tipo any, por ende utilizaremos el operator switchMap y asi obtendremos solo un retorno de tipo any
+
+## Navegar Programaticamente.
+
+Ademas de definir toda nuestra navegacion en nuestro app.module, tambien podremos configurar nuestra navegacion desde nuestro component.ts, para esto deberemos realizar la siguiente implementacion.
+
+Definiremos un elemento en nuestro html que invoque una funcion en nuestro componente.ts
+
+    <button class="btn btn-primary" (click)="submit()"> Submit</button>
+
+Importaremos la libreria de router.
+
+    import { Router } from '@angular/router';
+
+Se añade a nuestro constructor.
+
+    constructor(private router: Router) { }    
+
+Se define la navegavcion deseada para esta funcion.
+
+      submit () {
+            this.router.navigate(['/followers'], {
+            queryParams: { page:1 , order: 'newest'}
+            })
+        }
+
+##Autenticacion y Autorizacion
+
+Json Web Tokens
+
+Json Web Tokens son herramientas utilizadas para persistir la informacion de una session de usuario en los navegadores, este token usualmente esta codificado, y esta compuesto por 3 partes.
+
+    1. Header --> Header del mensaje a enviar 
+    2. Payload --> Informcion del usuario que se requiera, usuario, nombre, email etc
+    3. Signature --> Clave secreta con la cual se implementa mayor seguridad al token.
+
+Nota: Si se modifica por alguna razon el contenido del payload tambien se deberá modificar el signature, de modo que si se detecta que el payload se modifico y no el signature podria tratarse de una peticion maliciosa.
+
+## Implementacion Login.
+
+Para que podamos loguearnos en la aplicacion, deberemos ingresar nuestras credenciales, si las credenciales son correctas la peticion generada al backend deberá retornar un token, en el cual estará toda la informacion necesaria, en caso de no ser la indicada entonces enviará null. Con lo anterior se deberá implementar un consumo REST el cual valide si retorno el token o no.
+
+        login(credentials) { 
+        return this.http.post('/api/authenticate', 
+            JSON.stringify(credentials))
+            .map(response => {
+                let result = response.json();
+                if(result && result.token) {
+                localStorage.setItem('token', result.token);
+                return true;
+                }
+                return false;
+            });
+        }
+
+Adicionalmente si el backend retorna el token, deberemos guardarlo en el localStorage de nuestro browser, esto con el proposito de conservar la session del usuario en el tiempo.
+
+
+## Conservar la session del usuario.
+
+Como habiamos comentado anteriormente en nuestro localStorage estará nuestro Token, con base en este podremos saber si nuestro usuario esta logueado o no.
+
+
+        isLoggedIn() { 
+        //tokenNotExpired() hace lo mismo
+
+            let jwtHelper = new JwtHelper();
+            let token = localStorage.getItem('token')
+
+            if (!token)
+            return false; 
+
+            let expirationDate = jwtHelper.getTokenExpirationDate(token);
+            let isExpired = jwtHelper.isTokenExpired(token);
+
+            console.log (jwtHelper + '\n'
+                        + token + '\n'
+                        + expirationDate + '\n'
+                        + isExpired + '\n')
+            
+            return !isExpired;
+        }
+
+Adicionalmente si nuestro usuario esta logueado o no, tambien podriamos ocultar o mostrar diferentes elementos de nuestro HTML, asi como el login o el logout, o informacion privilegiada.     
+
+    <li *ngIf="authService.isLoggedIn()"><a routerLink="/admin">Admin</a></li>
+    <li *ngIf="!authService.isLoggedIn()"><a  routerLink="/login">Login</a></li>
+    <li *ngIf="authService.isLoggedIn()"><a (click)="authService.logout()">Logout</a></li>
+
+## Obtener informacion Token
+
+para obtener la informacion del usuario actual en la aplicacion deberemos aplicar la siguiente logica. 
+
+    get currentUser() {
+        let token = localStorage.getItem('token');
+        console.log(token);
+        if (!token)
+        return null;
+        return new JwtHelper().decodeToken(token);
+    }  
+
+Si queremos visualizar el nombre del usuario en nuestro html deberemos añadir la siguiente directiva.
+
+        <p  *ngIf="authService.isLoggedIn()">
+        Welcome {{ authService.currentUser.name }}
+        </p>    
+
+## Proteger URL
+
+Partamos del caso que tenemos una como la siguiente something/admin donde el contenido de esta solo puede ser observado por un usuario logueado de tipo Admin, y alguien intenta acceder directamente a la url something/admin la aplicacion le permitirá ver este contenido.
+
+Angular brinda una interface llamada CanActivate la cual nos permitira redireccionar a la ventana del login a cualquier usuario que intente acceder por la url.
+
+Inicialmente deberemos crear una nuevo service
+
+    ng g s authGuard
+
+Luego en nuestro servicio creado deberemos realizar la implementacion de la interface CanActivate
+
+        import { Router,RouterStateSnapshot } from '@angular/router';
+        import { AuthService } from './auth.service';
+        import { Injectable } from '@angular/core';
+        import { CanActivate} from '@angular/router';
+        
+        @Injectable()
+        export class AuthGuard implements CanActivate{
+
+        constructor(
+            private authService: AuthService,
+            private router: Router) { }
+
+        canActivate(route, state: RouterStateSnapshot) {
+            if (this.authService.isLoggedIn()) return true;
+
+            this.router.navigate(['/login'], {queryParams: { returnUrl: state.url}});
+            return false;
+            
+        }
+        }
+
+Como ultimo paso deberemos modificar nuestro archivo app.module.ts en el cual deberemos injectar el nuevo provider y modificar nuestro roter de la siguiente manera.
+
+Router
+    { path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+
+Como pueden observar en la linea  this.router.navigate(['/login'], {queryParams: { returnUrl: state.url}}); se esta obteniendo la url a la cual se trata de acceder, esto se realiza con el proposito de que si el usuario posteriormente se loguea este sea redireccionado a la url que trato de acceder y no a el home page, adicionalmente de esto en la logica de nuestro login deberemos añadir lo siguiente.
+
+          let url = this.route.snapshot.queryParamMap.get('returnUrl');
+          this.router.navigate([ url || '/']);
+
+## Restriguir URL por usuarios
+
+Como vimos anteriormente podemos tambien restringuir las url para los usuario ya logueados, segun su rol, para esto utulizaremos de nuevo el mismo proceso de CanActivate.
+
+      canActivate() {
+        let user = this.AuthService.currentUser;
+
+        if (user && user.admin) return true;
+
+        this.router.navigate(['no-access']);
+        return false;
+    }    
+
+Y modificamos nuestro app.module como vimos antes tanto en nuestro router como nuestro provider.
+
+ { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AuthAdmin]},
+
+ Es importante notar que los elementos de CanActivate se ejecutaran en secuencia.    
+
 
 

@@ -28,6 +28,9 @@ import { FollowersComponent } from './followers/followers.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SomeFollowersComponent } from './some-followers/some-followers.component';
 import { AnotherFollowersComponent } from './another-followers/another-followers.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import { ArchiveComponent } from './archive/archive.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -52,17 +55,22 @@ import { AnotherFollowersComponent } from './another-followers/another-followers
     FollowersComponent,
     ProfileComponent,
     SomeFollowersComponent,
-    AnotherFollowersComponent
+    AnotherFollowersComponent,
+    HomePageComponent,
+    ArchiveComponent,
+    NotFoundComponent
     ],
   imports: [
     BrowserModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component:  WelcomeComponent},
+      { path: '', component:  HomePageComponent},
       { path: 'followers', component:  FollowersComponent},
       { path: 'profile', component:  ProfileComponent},
       { path: 'someProfile/:id/:username', component:  SomeFollowersComponent},
       { path: 'anotherFollower', component:  AnotherFollowersComponent},
+      { path: 'archive/:year/:month', component:  ArchiveComponent},
+      { path: '**', component:  NotFoundComponent},
     ])
   ],
   providers: [
