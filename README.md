@@ -592,5 +592,117 @@ Y modificamos nuestro app.module como vimos antes tanto en nuestro router como n
 
  Es importante notar que los elementos de CanActivate se ejecutaran en secuencia.    
 
+# Deployment
+
+## Enviroments
+
+En el desarrollo de software se utilizan diferentes instancias o ambientes de la aplicacion, entre estos estan desarrollo, laboratorio y produccion. Para el manejo de estos ambientes en angular existen archivo en la direccion assest/enviroment, alli aparecerán unos archivos .ts en el cual se deberan especificar las caracteristicas distinguivas de cada uno de los ambientes, ya sean endpoints o titles para distinguir los ambientes.
+
+Para correr el ambiente utilizaremos:
+
+        ng serve 
+        ng serve --environment=test
+        ng serve --environment=prod
+
+## Creando nuevos Environments
+
+Para crear nuevos enviroments deberemos añadir un nuevo archivo en nuestra carpeta enviroments con los mismos atributos de los otros enviroments, adicionalmetne deberemos inscribir este nuevo ambiente en el archivo .angular-cli.js en la seccion de enviroments
+
+        environment.test.ts --> new file
+
+
+.angular-cli.js
+
+        "environments": {
+            "dev": "environments/environment.ts",
+            "test": "environments/environment.test.ts",
+            "prod": "environments/environment.prod.ts"
+        }
+
+
+## TsLint
+
+TsLint es una extension brindada para analizar el codigo, esto con el proposito de que todos los miembros de un equipo se guien por las mismas pautas de desarrollo. Para utilizar esta herramienta con angular tenemos dos opciones.
+
+    1. Podremos en la consola utilizar el comando ng lint y este nos mostrará todos lso errores de sintaxis que contenga nuestra aplicacion, sinembargo este metodo no es muy intuitivo.
+
+    2. Añadir la extension TsLint CodeStudio, para esto deberemos ir a la seccion de extenciones de CodeStudio buscar TsLint y presionar instalar. Una vez hayamos realizado esto cada vez que estemos desarrollando y cometamos un error de sintaxis basado en el archivo tslint.js CodeStudio nos avisará!!.
+
+
+# FireBase
+
+1. Rapida, escalable y en tiempo real base de datos en la nube.
+2. Authentication
+3. Cloud Message
+4. Storage.
+5. Analytics.
+
+Firebase brinda librerias para iOS, android, Javascript y C++.
+
+## Crear proyecto firebase
+
+Nos dirigiremos a la siguiente URL y en ella aparecerá la opcion de crear un nuevo proyecto, solo deberemos seleccionar el nombre y la region a eleccion.
+
+        https://console.firebase.google.com/    
+
+## Firebase Database    
+
+En firebase se manejan base de datos noSql las cuales consisten en nodos los cuales estan definidos por clave/valor y el valor puede ser un atributo simple o un atributo compuesto. Este tipo de base de datos no tiene ningun esquema en espefico, ni tablas, ni relaciones.
+
+            {
+                courses : {
+                    1: "course1",
+                    2: "course2",
+                    3: {
+                        author: "someName",
+                        price:  100,
+                        title:  "course3"
+                    }
+                }
+            } 
+
+## Instalando Firebase
+
+Crearemos un nuevo proyecto angular para ejemplificar la instalacion de firebase.
+
+1. Creacion angular project.
+
+        ng new firebase-demo
+
+2. Moverse a la carpeta del proyecto creado.
+
+        cd firebase-demo
+
+3. Instalar librerias de firebase en nuestro proyecto.
+
+        npm install firebase angularfire2 --save
+
+4. Abiremos nuestro proyecto en el edito Code, y nos dirigiremos a la carpeta environment y seleccionaremos el archivo enviroment ts, en este archivo deberemos copiar las credenciales de nuestro firebase de la siguiente manera.
+
+        producion: false,
+        firebase: {
+                apiKey: "AIzaSyAn1OvnQEmxe_NLRDu-J--hp4wCtq5dCb4",
+                authDomain: "fir-demo-16fbb.firebaseapp.com",
+                databaseURL: "https://fir-demo-16fbb.firebaseio.com",
+                projectId: "fir-demo-16fbb",
+                storageBucket: "fir-demo-16fbb.appspot.com",
+                messagingSenderId: "250339311858"
+        }        
+
+Estas credenciales de obtienen de la pagina de firebase --> Project Overview --> Añade firebase a tu aplicacion.        
+
+5. Actualizar app.modules.js
+
+Inicialmente deberemos añadir las siguientes importaciones.
+
+        import { AngularFireModule } from 'angularfire2';
+        import { AngularFireDatabaseModule } from 'angularfire2/database';
+
+Tambien en la seccion de imports, deberemos añadir las siguientes lineas.
+
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireDatabaseModule        
+
+    
 
 
