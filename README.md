@@ -675,7 +675,8 @@ Crearemos un nuevo proyecto angular para ejemplificar la instalacion de firebase
 
 3. Instalar librerias de firebase en nuestro proyecto.
 
-        npm install firebase angularfire2 --save
+        npm install firebase@^4.8.0 --save
+        npm install angularfire2 --save
 
 4. Abiremos nuestro proyecto en el edito Code, y nos dirigiremos a la carpeta environment y seleccionaremos el archivo enviroment ts, en este archivo deberemos copiar las credenciales de nuestro firebase de la siguiente manera.
 
@@ -701,8 +702,66 @@ Inicialmente deberemos añadir las siguientes importaciones.
 Tambien en la seccion de imports, deberemos añadir las siguientes lineas.
 
         AngularFireModule.initializeApp(environment.firebase),
-        AngularFireDatabaseModule        
+        AngularFireDatabaseModule 
 
+
+## Leer informacion Firebase
+
+1. Importamos 
+
+        import { AngularFireDatabase} from 'angularfire2/database';
+
+2. En nuestro constructor realizamos la siguiente configuracion 
+
+          constructor (db: AngularFireDatabase) {
+            const list = db.list('courses').valueChanges()
+                .subscribe(courses => {
+                    this.courses = courses;
+                    console.log(this.courses);
+                });
+            }  
+
+Y con esto ya obtendremos la informacion de nuestros cursos registrados en firebase.
+
+## Leer informacion evitando memory leaks
+
+1. Configuracion del componente
+
+         export class AppComponent {
+            courses$;
+            constructor (db: AngularFireDatabase) {
+                this.courses$ = db.list('courses').valueChanges();
+            }
+            }
+
+2. Uso de async Pipe
+
+        <ul>
+            <li *ngFor = "let course of courses$ | async">
+            {{ course }}
+            </li>
+        </ul>    
+
+## Leyendo Objetos de firebase.
+
+Podemos leer un objeto en especial de nuestro nodo creado en firebase de la siguiente manera.
+
+ 1. en nuestro componente.
+
+        this.author$ = db.object('/authors/1').valueChanges();
+
+2. En nuestra vista
+
+         <p> {{ author$ | async | json }}</p>        
+
+
+## Mostrando atributos del objeto
+
+        <ul *ngIf="author$ | async  as author">
+            <li> {{ author?.name }}</li>
+            <li> {{ author?.students }}</li>
+            <li> {{ author?.premiun }}</li>
+        </ul>
     
 
 
