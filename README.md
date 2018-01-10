@@ -762,6 +762,32 @@ Podemos leer un objeto en especial de nuestro nodo creado en firebase de la sigu
             <li> {{ author?.students }}</li>
             <li> {{ author?.premiun }}</li>
         </ul>
+
+## Insertar informacion firebase
+
+            this.db.list('courses').push({
+                name: course.value,
+                price: 150,
+                usLive: true,
+                section: [
+                    {title: 'Components'},
+                    {title: 'Directives'},
+                    {title: 'Templates'},
+                ]
+                });        
     
 
+## Actualizar Registros
 
+Para actualizar registros en firebase tenemos dos opciones set y update, set reemplazará todo el objeto por aquel que le estamos dando en cambio update, sobreescribirá las propiedades que le estemos dando y si no existe las creará.
+
+            update(course) {
+                this.db.object('/courses/' +course.key).set(course.payload.node_.value_ + 'Updated');
+                this.db.object('/courses/' +course.key +1).update({title: 'New Title',islive : true});
+            }
+
+## Eliminar Registros.
+
+        delete(course) {
+            this.db.object('/courses/' +course.key).remove().then (x => console.log("Deleted"))
+        }
